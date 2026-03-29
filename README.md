@@ -26,7 +26,7 @@ If you're a nonprofit accountant, treasurer, or finance director preparing Form 
 
 ## Usage
 
-1. Visit [990mapper.fossys.com](https://990mapper.fossys.com)
+1. Visit [szubair22.github.io/990Mapper](https://szubair22.github.io/990Mapper)
 2. Drop your chart of accounts file (or click to browse)
 3. Confirm which columns contain the account name and balance
 4. Review the auto-suggested mappings and adjust any that need correction
@@ -50,4 +50,4 @@ MIT
 
 ## Built By
 
-[Fossys](https://fossys.com)
+[Fossys](https://github.com/szubair22/990Mapper)

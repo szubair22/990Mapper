@@ -1,0 +1,26 @@
+{
+  "name": "990mapper",
+  "version": "1.0.0",
+  "description": "**Free, open-source tool to map your nonprofit's chart of accounts to IRS Form 990 Part IX (Statement of Functional Expenses).**",
+  "main": "playwright.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szubair22/990Mapper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/szubair22/990Mapper/issues"
+  },
+  "homepage": "https://github.com/szubair22/990Mapper#readme",
+  "dependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}
