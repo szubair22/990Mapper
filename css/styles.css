@@ -255,6 +255,10 @@ body::before {
   font-weight: 500;
 }
 
+.error-banner[hidden] {
+  display: none;
+}
+
 .error-close {
   background: none;
   border: none;
