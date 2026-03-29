@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>990 Mapper - Map Your Chart of Accounts to Form 990 Part IX</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="app-title">990 Mapper</h1>
+      <p class="app-subtitle">Map your chart of accounts to Form 990 Part IX</p>
+    </header>
+
+    <!-- Progress Bar -->
+    <nav class="progress-bar" aria-label="Wizard progress">
+      <div class="progress-track"></div>
+      <div class="progress-step active" data-step="1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Upload</div>
+      </div>
+      <div class="progress-step" data-step="2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Map</div>
+      </div>
+      <div class="progress-step" data-step="3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Review</div>
+      </div>
+      <div class="progress-step" data-step="4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Export</div>
+      </div>
+    </nav>
+
+    <!-- Error Banner -->
+    <div id="error-banner" class="error-banner" hidden>
+      <span id="error-message"></span>
+      <button class="error-close" onclick="App.hideError()">&times;</button>
+    </div>
+
+    <!-- Step 1: Upload -->
+    <section id="step-1" class="step-container active">
+      <div class="privacy-banner">
+        <svg class="privacy-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Your data never leaves your browser. All processing happens locally on your device.</span>
+      </div>
+
+      <div id="drop-zone" class="drop-zone">
+        <svg class="drop-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <p class="drop-text">Drop your file here</p>
+        <p class="drop-or">or</p>
+        <label class="btn btn-secondary file-label">
+          Choose File
+          <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+        </label>
+        <p class="drop-hint">Accepts .csv, .xlsx, .xls</p>
+      </div>
+
+      <!-- File Preview (shown after file is loaded) -->
+      <div id="file-preview" class="file-preview" hidden>
+        <h3 class="section-title">File Preview</h3>
+        <div class="table-wrapper">
+          <table id="preview-table" class="data-table">
+            <thead id="preview-thead"></thead>
+            <tbody id="preview-tbody"></tbody>
+          </table>
+        </div>
+
+        <h3 class="section-title">Column Mapping</h3>
+        <p class="section-desc">Tell us which columns contain the account information:</p>
+        <div class="column-selectors">
+          <div class="selector-group">
+            <label for="col-name">Account Name</label>
+            <select id="col-name" class="form-select"></select>
+          </div>
+          <div class="selector-group">
+            <label for="col-number">Account Number</label>
+            <select id="col-number" class="form-select"></select>
+          </div>
+          <div class="selector-group">
+            <label for="col-balance">Balance / Amount</label>
+            <select id="col-balance" class="form-select"></select>
+          </div>
+        </div>
+
+        <div id="file-summary" class="file-summary"></div>
+
+        <div class="step-actions">
+          <button class="btn btn-primary" onclick="App.confirmColumns()">Continue to Mapping</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Map -->
+    <section id="step-2" class="step-container">
+      <div class="step-header">
+        <h2 id="mapping-header">Map Accounts</h2>
+        <div class="filter-bar">
+          <input type="text" id="mapping-filter" class="form-input" placeholder="Search accounts..." oninput="App.filterMappings(this.value)">
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table mapping-table">
+          <thead>
+            <tr>
+              <th>Account Name</th>
+              <th>Account #</th>
+              <th class="col-balance">Balance</th>
+              <th class="col-mapping">Suggested 990 Line</th>
+              <th class="col-confidence">Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="mapping-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-outline" onclick="App.goToStep(1)">Back</button>
+        <button class="btn btn-primary" onclick="App.confirmMappings()">Confirm Mappings</button>
+      </div>
+    </section>
+
+    <!-- Step 3: Review -->
+    <section id="step-3" class="step-container">
+      <h2 class="section-title">Form 990 Part IX Summary</h2>
+      <p class="section-desc">Click any row to see which accounts are mapped to that line.</p>
+
+      <div class="table-wrapper">
+        <table class="data-table summary-table">
+          <thead>
+            <tr>
+              <th class="col-expand"></th>
+              <th>Line #</th>
+              <th>Description</th>
+              <th class="col-balance">Total Amount</th>
+              <th class="col-count"># Accounts</th>
+            </tr>
+          </thead>
+          <tbody id="summary-tbody"></tbody>
+        </table>
+      </div>
+
+      <div id="line25-total" class="line25-total"></div>
+
+      <div class="step-actions">
+        <button class="btn btn-outline" onclick="App.goToStep(2)">Back to Mapping</button>
+        <button class="btn btn-primary" onclick="App.goToStep(4)">Continue to Export</button>
+      </div>
+    </section>
+
+    <!-- Step 4: Export -->
+    <section id="step-4" class="step-container">
+      <h2 class="section-title">Export Your Mapping</h2>
+      <p class="section-desc">Choose how you want to download your completed 990 Part IX mapping.</p>
+
+      <div class="export-cards">
+        <div class="export-card" onclick="App.exportCSV()">
+          <svg class="export-icon" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <h3>Download CSV</h3>
+          <p>Comma-separated values file. Opens in Excel, Google Sheets, and most accounting software.</p>
+        </div>
+
+        <div class="export-card" onclick="App.exportExcel()">
+          <svg class="export-icon" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M8 13h2l2 4 2-4h2"></path>
+          </svg>
+          <h3>Download Excel</h3>
+          <p>Formatted .xlsx workbook with separate sheets for the mapping and the Part IX summary.</p>
+        </div>
+
+        <div class="export-card" onclick="App.printView()">
+          <svg class="export-icon" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <h3>Print View</h3>
+          <p>Open a printer-friendly version of the Part IX summary for your records.</p>
+        </div>
+      </div>
+
+      <div class="step-actions step-actions-center">
+        <button class="btn btn-outline" onclick="App.startOver()">Start Over</button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p class="disclaimer">This tool is for informational purposes only. It does not constitute tax advice. Consult a qualified tax professional before filing Form 990.</p>
+      <p class="branding">Built by <strong>Fossys</strong></p>
+    </footer>
+
+  </div>
+
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+
+  <!-- App Modules -->
+  <script src="js/mapping-dictionary.js"></script>
+  <script src="js/file-parser.js"></script>
+  <script src="js/fuzzy-matcher.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
