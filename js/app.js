@@ -107,6 +107,12 @@ const App = {
       return;
     }
 
+    // File size limit: 50 MB
+    if (file.size > 50 * 1024 * 1024) {
+      this.showError('File is too large. Please upload a file under 50 MB.');
+      return;
+    }
+
     const zone = document.getElementById('drop-zone');
     zone.classList.add('loading');
     const origText = zone.querySelector('.drop-text').textContent;
@@ -216,8 +222,9 @@ const App = {
   updateFileSummary() {
     const balVal = document.getElementById('col-balance').value;
     if (!balVal || balVal === '__none__') {
-      document.getElementById('file-summary').innerHTML =
-        'Found <strong>' + this.rawRows.length + '</strong> rows';
+      const summary1 = document.getElementById('file-summary');
+      summary1.textContent = '';
+      summary1.append('Found ', Object.assign(document.createElement('strong'), { textContent: this.rawRows.length }), ' rows');
       return;
     }
 
@@ -232,8 +239,14 @@ const App = {
       }
     });
 
-    document.getElementById('file-summary').innerHTML =
-      'Found <strong>' + count + '</strong> accounts totaling <strong>' + this.formatCurrency(total) + '</strong>';
+    const summary2 = document.getElementById('file-summary');
+    summary2.textContent = '';
+    summary2.append(
+      'Found ',
+      Object.assign(document.createElement('strong'), { textContent: count }),
+      ' accounts totaling ',
+      Object.assign(document.createElement('strong'), { textContent: this.formatCurrency(total) })
+    );
   },
 
   confirmColumns() {
@@ -531,9 +544,15 @@ const App = {
     });
 
     // Line 25 total
-    document.getElementById('line25-total').innerHTML =
-      'Line 25 - Total functional expenses<span class="total-amount">' +
-      this.formatCurrency(summary.grandTotal) + '</span>';
+    const line25El = document.getElementById('line25-total');
+    line25El.textContent = '';
+    line25El.append(
+      'Line 25 - Total functional expenses',
+      Object.assign(document.createElement('span'), {
+        className: 'total-amount',
+        textContent: this.formatCurrency(summary.grandTotal)
+      })
+    );
   },
 
   toggleLineDetail(lineNumber) {

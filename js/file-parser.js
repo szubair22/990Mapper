@@ -37,6 +37,12 @@ const FileParser = {
           });
           const rows = raw.slice(1);
 
+          // Row count limit to prevent browser freeze
+          if (rows.length > 50000) {
+            reject(new Error('File contains too many rows (' + rows.length + '). Maximum is 50,000 rows.'));
+            return;
+          }
+
           resolve({ headers: headers, rows: rows, sheetName: sheetName });
         } catch (err) {
           reject(new Error('Failed to parse file: ' + err.message));

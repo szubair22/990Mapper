@@ -40,7 +40,11 @@ const Exporter = {
    */
   _csvEscape(value) {
     if (value == null) return '""';
-    const str = String(value);
+    let str = String(value);
+    // Prevent CSV formula injection - prefix dangerous leading characters
+    if (/^[=+\-@\t\r]/.test(str)) {
+      str = "'" + str;
+    }
     return '"' + str.replace(/"/g, '""') + '"';
   },
 
