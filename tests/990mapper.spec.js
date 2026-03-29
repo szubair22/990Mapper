@@ -571,3 +571,103 @@ test.describe('Edge Cases', () => {
     await expect(page.locator('#step-3')).not.toBeVisible();
   });
 });
+
+// ============================================================
+// 7. Dark Mode Toggle
+// ============================================================
+test.describe('Dark Mode Toggle', () => {
+
+  test('theme toggle button is visible on page load', async ({ page }) => {
+    await page.goto('/');
+    const toggle = page.locator('#theme-toggle');
+    await expect(toggle).toBeVisible();
+  });
+
+  test('default theme respects no data-theme attribute (light mode)', async ({ page }) => {
+    await page.goto('/');
+    const html = page.locator('html');
+    await expect(html).not.toHaveAttribute('data-theme', 'dark');
+    // Body should not have a dark class
+    const body = page.locator('body');
+    await expect(body).not.toHaveClass(/dark/);
+  });
+
+  test('clicking toggle switches to dark mode', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#theme-toggle').click();
+    const html = page.locator('html');
+    await expect(html).toHaveAttribute('data-theme', 'dark');
+  });
+
+  test('clicking toggle again switches back to light mode', async ({ page }) => {
+    await page.goto('/');
+    // First click: switch to dark
+    await page.locator('#theme-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+    // Second click: switch back to light
+    await page.locator('#theme-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  });
+
+  test('theme preference persists via localStorage', async ({ page }) => {
+    await page.goto('/');
+    // Switch to dark mode
+    await page.locator('#theme-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+    // Verify localStorage has the theme preference
+    const storedTheme = await page.evaluate(() => localStorage.getItem('990mapper-theme'));
+    expect(storedTheme).toBe('dark');
+
+    // Reload the page
+    await page.reload();
+
+    // Theme should persist after reload
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  });
+
+  test('toggle button has correct aria-label', async ({ page }) => {
+    await page.goto('/');
+    const toggle = page.locator('#theme-toggle');
+    await expect(toggle).toHaveAttribute('aria-label', 'Toggle dark mode');
+  });
+
+  test('dark mode: privacy banner is still visible', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#theme-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+    const banner = page.locator('.privacy-banner');
+    await expect(banner).toBeVisible();
+  });
+
+  test('dark mode: full workflow still functions', async ({ page }) => {
+    await page.goto('/');
+
+    // Enable dark mode
+    await page.locator('#theme-toggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+    // Upload the sample CSV
+    await page.locator('#file-input').setInputFiles(FIXTURE_CSV);
+
+    // File preview should appear
+    const preview = page.locator('#file-preview');
+    await expect(preview).toBeVisible();
+
+    // Column selectors should be populated
+    const colName = page.locator('#col-name');
+    await expect(colName.locator('option')).toHaveCount(4);
+
+    // Advance to step 2
+    await page.getByText('Continue to Mapping').click();
+    await expect(page.locator('#step-2')).toBeVisible();
+
+    // Mapping table should be populated
+    const rows = page.locator('#mapping-tbody tr');
+    const count = await rows.count();
+    expect(count).toBeGreaterThan(0);
+    expect(count).toBeLessThanOrEqual(EXPECTED_ACCOUNT_COUNT);
+  });
+});

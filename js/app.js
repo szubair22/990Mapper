@@ -18,6 +18,7 @@ const App = {
     this.setupDropZone();
     this.setupFileInput();
     this.updateProgress();
+    this.initTheme();
   },
 
   // ---- Navigation ----
@@ -618,6 +619,40 @@ const App = {
 
   hideError() {
     document.getElementById('error-banner').hidden = true;
+  },
+
+  // ---- Theme Toggle ----
+
+  initTheme() {
+    // Check for saved preference, then OS preference
+    const saved = localStorage.getItem('990mapper-theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    // Set up toggle button
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', () => this.toggleTheme());
+    }
+
+    // Listen for OS theme changes (only if no manual preference saved)
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('990mapper-theme')) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    }
+  },
+
+  toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('990mapper-theme', next);
   },
 };
 
