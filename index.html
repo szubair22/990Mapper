@@ -3,16 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free, open-source tool to map your nonprofit chart of accounts to IRS Form 990 Part IX. No signup, no data upload - runs entirely in your browser.">
   <title>990 Mapper - Map Your Chart of Accounts to Form 990 Part IX</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>9</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <a href="#step-1" class="skip-link">Skip to content</a>
+  <div class="page-gradient" aria-hidden="true"></div>
+
   <div class="container">
 
     <!-- Header -->
     <header class="app-header">
       <h1 class="app-title">990 Mapper</h1>
       <p class="app-subtitle">Map your chart of accounts to Form 990 Part IX</p>
+      <p class="app-tagline">Free. Private. Open source.</p>
     </header>
 
     <!-- Progress Bar -->
@@ -20,19 +29,19 @@
       <div class="progress-track"></div>
       <div class="progress-step active" data-step="1">
         <div class="step-circle">1</div>
-        <div class="step-label">Upload</div>
+        <div class="step-label">Upload<span class="step-sublabel">Import your file</span></div>
       </div>
       <div class="progress-step" data-step="2">
         <div class="step-circle">2</div>
-        <div class="step-label">Map</div>
+        <div class="step-label">Map<span class="step-sublabel">Auto-match accounts</span></div>
       </div>
       <div class="progress-step" data-step="3">
         <div class="step-circle">3</div>
-        <div class="step-label">Review</div>
+        <div class="step-label">Review<span class="step-sublabel">Verify totals</span></div>
       </div>
       <div class="progress-step" data-step="4">
         <div class="step-circle">4</div>
-        <div class="step-label">Export</div>
+        <div class="step-label">Export<span class="step-sublabel">Download results</span></div>
       </div>
     </nav>
 
@@ -53,18 +62,24 @@
       </div>
 
       <div id="drop-zone" class="drop-zone">
-        <svg class="drop-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="17 8 12 3 7 8"></polyline>
-          <line x1="12" y1="3" x2="12" y2="15"></line>
-        </svg>
-        <p class="drop-text">Drop your file here</p>
-        <p class="drop-or">or</p>
-        <label class="btn btn-secondary file-label">
-          Choose File
-          <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
-        </label>
-        <p class="drop-hint">Accepts .csv, .xlsx, .xls</p>
+        <div class="drop-zone-inner">
+          <svg class="drop-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <p class="drop-text">Drop your file here</p>
+          <p class="drop-or">or</p>
+          <label class="btn btn-secondary file-label">
+            Choose File
+            <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+          </label>
+          <div class="drop-formats">
+            <span class="format-tag">.csv</span>
+            <span class="format-tag">.xlsx</span>
+            <span class="format-tag">.xls</span>
+          </div>
+        </div>
       </div>
 
       <!-- File Preview (shown after file is loaded) -->
@@ -167,6 +182,7 @@
 
       <div class="export-cards">
         <div class="export-card" onclick="App.exportCSV()">
+          <span class="export-card-badge">Most Compatible</span>
           <svg class="export-icon" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
@@ -178,6 +194,7 @@
         </div>
 
         <div class="export-card" onclick="App.exportExcel()">
+          <span class="export-card-badge">Recommended</span>
           <svg class="export-icon" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
@@ -188,6 +205,7 @@
         </div>
 
         <div class="export-card" onclick="App.printView()">
+          <span class="export-card-badge">CPA Ready</span>
           <svg class="export-icon" viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5">
             <polyline points="6 9 6 2 18 2 18 9"></polyline>
             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -205,8 +223,13 @@
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p class="disclaimer">This tool is for informational purposes only. It does not constitute tax advice. Consult a qualified tax professional before filing Form 990.</p>
-      <p class="branding">Built by <a href="https://github.com/szubair22/990Mapper" target="_blank"><strong>Fossys</strong></a></p>
+      <div class="footer-badges">
+        <span class="footer-badge">100% Client-Side</span>
+        <span class="footer-badge">Open Source</span>
+        <span class="footer-badge">No Data Collection</span>
+      </div>
+      <p class="disclaimer">This tool is a mapping aid, not tax advice. Consult a qualified tax professional before filing Form 990.</p>
+      <p class="branding">Built by <a href="https://github.com/szubair22/990Mapper" target="_blank"><strong>Fossys</strong></a> <span class="version">v1.0</span></p>
     </footer>
 
   </div>

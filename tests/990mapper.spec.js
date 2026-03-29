@@ -32,14 +32,14 @@ test.describe('Page Load & Initial State', () => {
     const dropZone = page.locator('#drop-zone');
     await expect(dropZone).toBeVisible();
     await expect(dropZone).toContainText('Drop your file here');
-    await expect(dropZone).toContainText('Accepts .csv, .xlsx, .xls');
+    await expect(dropZone.locator('.format-tag').first()).toHaveText('.csv');
   });
 
   test('progress bar shows step 1 as active', async ({ page }) => {
     await page.goto('/');
     const step1 = page.locator('.progress-step[data-step="1"]');
     await expect(step1).toHaveClass(/active/);
-    await expect(step1.locator('.step-label')).toHaveText('Upload');
+    await expect(step1.locator('.step-label')).toContainText('Upload');
   });
 
   test('steps 2, 3, 4 sections are not visible', async ({ page }) => {
@@ -53,7 +53,7 @@ test.describe('Page Load & Initial State', () => {
     await page.goto('/');
     const disclaimer = page.locator('.disclaimer');
     await expect(disclaimer).toBeVisible();
-    await expect(disclaimer).toContainText('informational purposes only');
+    await expect(disclaimer).toContainText('mapping aid');
     await expect(disclaimer).toContainText('qualified tax professional');
   });
 
