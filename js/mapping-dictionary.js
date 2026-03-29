@@ -7,7 +7,7 @@
 var MAPPING_RULES = {
   "1": {
     line: "1",
-    label: "Grants and other assistance to domestic organizations",
+    label: "Grants and other assistance to domestic organizations and domestic governments",
     keywords: [
       "grants to organizations", "grants to domestic organizations", "grants paid",
       "grant expense", "grants expense", "grant disbursement", "grants disbursed",
@@ -22,7 +22,8 @@ var MAPPING_RULES = {
       "assistance to organizations", "assistance to domestic organizations",
       "contributions to other organizations", "contributions to affiliates domestic",
       "fiscal sponsorship grants", "fiscal sponsor distributions",
-      "community grants", "community grant awards"
+      "community grants", "community grant awards",
+      "grants to partner organizations", "partner organization grants", "grants to partners"
     ],
     weight: 1.0
   },
@@ -32,8 +33,8 @@ var MAPPING_RULES = {
     keywords: [
       "grants to individuals", "individual grants", "scholarships",
       "scholarship expense", "scholarship awards", "fellowships",
-      "fellowship expense", "fellowship awards", "stipends",
-      "stipend expense", "student aid", "student assistance",
+      "fellowship expense", "fellowship awards",
+      "student aid", "student assistance",
       "tuition assistance", "tuition aid", "educational grants",
       "emergency assistance", "emergency aid", "emergency grants",
       "client assistance", "client aid", "client grants",
@@ -50,7 +51,7 @@ var MAPPING_RULES = {
   },
   "3": {
     line: "3",
-    label: "Grants and other assistance to foreign organizations/individuals",
+    label: "Grants and other assistance to foreign organizations, foreign governments, and foreign individuals",
     keywords: [
       "foreign grants", "international grants", "overseas grants",
       "grants to foreign organizations", "grants to foreign individuals",
@@ -85,7 +86,7 @@ var MAPPING_RULES = {
   },
   "5": {
     line: "5",
-    label: "Compensation of current officers, directors, trustees, key employees",
+    label: "Compensation of current officers, directors, trustees, and key employees",
     keywords: [
       "officer compensation", "officer salary", "officer salaries",
       "director compensation", "director salary", "director salaries",
@@ -115,7 +116,9 @@ var MAPPING_RULES = {
     line: "6",
     label: "Compensation not included above to disqualified persons",
     keywords: [
+      "disqualified person", "disqualified persons",
       "disqualified person compensation", "disqualified persons compensation",
+      "section 4958", "excess benefit", "excess compensation",
       "related party compensation", "related party salary",
       "family member compensation", "family member salary",
       "substantial contributor compensation",
@@ -124,7 +127,7 @@ var MAPPING_RULES = {
       "disqualified person wages", "related party wages",
       "compensation to related parties"
     ],
-    weight: 0.9
+    weight: 1.2
   },
   "7": {
     line: "7",
@@ -158,7 +161,10 @@ var MAPPING_RULES = {
       "severance", "severance pay", "severance expense",
       "back pay", "retroactive pay",
       "shift differential", "hazard pay",
-      "program:staff salaries", "admin:staff salaries"
+      "program:staff salaries", "admin:staff salaries",
+      "development coordinator", "development staff", "development director salary",
+      "development manager salary", "development associate", "development officer salary",
+      "part-time program staff", "part-time staff", "program staff"
     ],
     weight: 1.0
   },
@@ -197,6 +203,9 @@ var MAPPING_RULES = {
       "medical insurance", "medical insurance expense",
       "dental insurance", "dental insurance expense", "dental",
       "vision insurance", "vision insurance expense", "vision",
+      "dental & vision", "dental and vision",
+      "dental plan", "vision plan",
+      "dental coverage", "vision coverage",
       "group health", "group health insurance", "group insurance",
       "life insurance", "life insurance expense", "group life",
       "disability insurance", "disability ins",
@@ -210,8 +219,7 @@ var MAPPING_RULES = {
       "employee assistance program", "EAP", "EAP expense",
       "wellness program", "wellness expense",
       "tuition reimbursement", "education reimbursement",
-      "professional development", "training and development",
-      "employee training", "staff training", "staff development",
+      "training and development",
       "continuing education", "continuing ed",
       "employee meals", "staff meals", "employee food",
       "employee parking", "parking benefit",
@@ -324,7 +332,7 @@ var MAPPING_RULES = {
       "public policy consulting", "policy consulting fees",
       "lobbying services", "lobbying consultant"
     ],
-    weight: 1.0
+    weight: 1.1
   },
   "11e": {
     line: "11e",
@@ -343,7 +351,7 @@ var MAPPING_RULES = {
       "prospect research fees", "donor research fees",
       "planned giving consultant", "major gifts consultant"
     ],
-    weight: 1.0
+    weight: 1.1
   },
   "11f": {
     line: "11f",
@@ -398,7 +406,9 @@ var MAPPING_RULES = {
       "other professional fees", "other consulting fees",
       "miscellaneous professional fees", "misc professional fees",
       "fees - other", "other fees", "service fees",
-      "outside services", "external services"
+      "outside services", "external services",
+      "strategic planning", "consulting strategic", "planning consultant",
+      "strategic consultant", "management consultant"
     ],
     weight: 0.9
   },
@@ -432,7 +442,12 @@ var MAPPING_RULES = {
       "recruitment advertising", "job posting fees",
       "classified ads", "ad placement",
       "marketing and advertising", "advertising and marketing",
-      "communications expense", "communications and marketing"
+      "communications expense", "communications and marketing",
+      "annual report", "report design", "print design",
+      "annual report design", "publication design",
+      "newsletter design", "brochure design", "flyer design", "graphic design",
+      "marketing outreach", "marketing & outreach", "marketing and outreach",
+      "outreach", "community outreach", "public outreach"
     ],
     weight: 1.0
   },
@@ -454,12 +469,6 @@ var MAPPING_RULES = {
       "delivery expense", "freight expense",
       "printing", "printing expense", "printing and copying",
       "copies", "copy expense", "photocopying",
-      "telephone", "telephone expense", "phone expense",
-      "phone service", "landline", "long distance",
-      "cell phone", "cellphone", "mobile phone", "cell phone expense",
-      "internet", "internet expense", "internet service",
-      "broadband", "ISP", "wifi", "wi-fi",
-      "telecommunications", "telecom", "telecom expense",
       "fax", "fax expense", "fax service",
       "small equipment", "minor equipment", "equipment under $5000",
       "furniture expense", "office furniture",
@@ -467,9 +476,6 @@ var MAPPING_RULES = {
       "cleaning supplies", "janitorial supplies",
       "copier lease", "printer lease", "copier maintenance",
       "office machine expense", "office equipment expense",
-      "bank fees", "bank charges", "bank service charges",
-      "merchant fees", "credit card processing fees",
-      "payment processing fees", "transaction fees",
       "dues and subscriptions", "subscriptions",
       "membership dues", "professional dues",
       "books and publications", "publications",
@@ -499,8 +505,14 @@ var MAPPING_RULES = {
       "website expense", "website maintenance", "website development",
       "website design", "web expense",
       "database expense", "database hosting",
-      "IT support", "IT services", "tech support",
-      "IT maintenance", "IT consulting",
+      "IT support", "IT support services", "IT services", "tech support",
+      "technical support", "technology support", "IT maintenance", "IT consulting",
+      "phone", "telephone", "telephone expense", "phone expense",
+      "phone service", "cell phone", "cellphone", "mobile phone", "cell phone expense",
+      "landline", "VoIP", "phone system",
+      "internet", "internet expense", "internet service",
+      "broadband", "ISP", "wifi", "wi-fi",
+      "telecommunications", "telecom", "telecom expense",
       "network expense", "networking expense",
       "cybersecurity", "cyber security", "security software",
       "antivirus", "anti-virus", "firewall",
@@ -533,7 +545,7 @@ var MAPPING_RULES = {
       "royalty fees", "mineral royalties",
       "performance royalties", "mechanical royalties"
     ],
-    weight: 1.0
+    weight: 1.1
   },
   "16": {
     line: "16",
@@ -566,7 +578,10 @@ var MAPPING_RULES = {
       "storage expense", "storage rental", "warehouse rental",
       "rent and utilities", "rent & utilities",
       "occupancy - program", "occupancy - admin",
-      "facility rental", "space rental"
+      "facility rental", "space rental",
+      "utilities electric", "utilities gas", "utilities water",
+      "rent office space", "office space rent", "office space",
+      "rent office", "rent - office", "rent - office space"
     ],
     weight: 1.0
   },
@@ -597,13 +612,16 @@ var MAPPING_RULES = {
       "program travel", "admin travel",
       "board travel", "board member travel",
       "travel - program", "travel - admin",
-      "travel and transportation"
+      "travel and transportation",
+      "travel lodging", "travel hotel", "travel accommodation",
+      "travel housing", "staff travel lodging", "staff travel airfare",
+      "travel meals"
     ],
     weight: 1.0
   },
   "18": {
     line: "18",
-    label: "Payments of travel or entertainment expenses for public officials",
+    label: "Payments of travel or entertainment expenses for any federal, state, or local public officials",
     keywords: [
       "public official travel", "government official travel",
       "official travel expense", "public official entertainment",
@@ -641,7 +659,10 @@ var MAPPING_RULES = {
       "speaker fees", "honorarium", "honoraria",
       "venue rental", "event venue", "conference venue",
       "conference and meetings", "conferences & meetings",
-      "education and training", "training and conferences"
+      "education and training", "training and conferences",
+      "professional development", "professional development training",
+      "staff training", "employee training", "staff development",
+      "skill development", "leadership training", "management training"
     ],
     weight: 1.0
   },
@@ -652,7 +673,7 @@ var MAPPING_RULES = {
       "interest expense", "interest paid", "interest payment",
       "interest on loans", "loan interest", "mortgage interest",
       "mortgage interest expense", "note payable interest",
-      "line of credit interest", "LOC interest",
+      "line of credit interest", "interest on line of credit", "LOC interest",
       "credit card interest", "finance charges",
       "interest on bonds", "bond interest",
       "interest - mortgage", "interest - loan",
@@ -773,7 +794,13 @@ var MAPPING_RULES = {
       "repairs and maintenance", "repairs", "maintenance",
       "equipment maintenance", "equipment repairs",
       "equipment rental", "equipment lease",
-      "program equipment", "program supplies and materials"
+      "program equipment", "program supplies and materials",
+      "participant stipend", "participant stipends", "program stipend", "stipend expense",
+      "stipends", "stipend",
+      "bank service charges", "bank service fees",
+      "credit card processing", "credit card processing fees",
+      "processing fees", "merchant service fees",
+      "transaction fees", "ACH fees", "wire transfer fees"
     ],
     weight: 0.7
   },
@@ -809,6 +836,19 @@ var MAPPING_RULES = {
       "total operating expenses", "total expenditures"
     ],
     weight: 0.3
+  },
+  "26": {
+    line: "26",
+    label: "Joint costs (combined educational campaign and fundraising solicitation)",
+    keywords: [
+      "joint costs", "joint cost", "joint cost allocation",
+      "combined educational campaign", "combined fundraising",
+      "joint activity costs", "joint activities",
+      "SOP 98-2", "ASC 958-720",
+      "combined campaign costs", "educational campaign costs",
+      "joint fundraising costs", "shared costs fundraising"
+    ],
+    weight: 0.5
   },
   "skip": {
     line: "skip",
@@ -846,11 +886,11 @@ var MAPPING_RULES = {
 };
 
 var PART_IX_LINES = [
-  { line: "1", label: "Grants and other assistance to domestic organizations" },
+  { line: "1", label: "Grants and other assistance to domestic organizations and domestic governments" },
   { line: "2", label: "Grants and other assistance to domestic individuals" },
-  { line: "3", label: "Grants and other assistance to foreign organizations/individuals" },
+  { line: "3", label: "Grants and other assistance to foreign organizations, foreign governments, and foreign individuals" },
   { line: "4", label: "Benefits paid to or for members" },
-  { line: "5", label: "Compensation of current officers, directors, trustees, key employees" },
+  { line: "5", label: "Compensation of current officers, directors, trustees, and key employees" },
   { line: "6", label: "Compensation not included above to disqualified persons" },
   { line: "7", label: "Other salaries and wages" },
   { line: "8", label: "Pension plan accruals and contributions" },
@@ -869,7 +909,7 @@ var PART_IX_LINES = [
   { line: "15", label: "Royalties" },
   { line: "16", label: "Occupancy" },
   { line: "17", label: "Travel" },
-  { line: "18", label: "Payments of travel or entertainment expenses for public officials" },
+  { line: "18", label: "Payments of travel or entertainment expenses for any federal, state, or local public officials" },
   { line: "19", label: "Conferences, conventions, and meetings" },
   { line: "20", label: "Interest" },
   { line: "21", label: "Payments to affiliates" },
@@ -881,5 +921,6 @@ var PART_IX_LINES = [
   { line: "24d", label: "Other expenses (Line 24d)" },
   { line: "24e", label: "Other expenses (Line 24e)" },
   { line: "25", label: "Total functional expenses (calculated)" },
+  { line: "26", label: "Joint costs (combined educational campaign and fundraising solicitation)" },
   { line: "skip", label: "Not an expense / Skip this account" }
 ];

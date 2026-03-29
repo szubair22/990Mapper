@@ -3,6 +3,7 @@ const { test, expect } = require('@playwright/test');
 const path = require('path');
 
 const FIXTURE_CSV = path.resolve(__dirname, 'fixtures', 'sample-accounts.csv');
+const FIXTURE_FULL_CSV = path.resolve(__dirname, 'fixtures', 'nonprofit-full-accounts.csv');
 
 // Expected account count in fixture CSV (rows with non-zero or zero balances, excluding header)
 const EXPECTED_ACCOUNT_COUNT = 22;
@@ -670,4 +671,74 @@ test.describe('Dark Mode Toggle', () => {
     expect(count).toBeGreaterThan(0);
     expect(count).toBeLessThanOrEqual(EXPECTED_ACCOUNT_COUNT);
   });
+});
+
+// ============================================================
+// 8. Mapping Accuracy - Full Nonprofit Chart of Accounts
+// ============================================================
+test.describe('Mapping Accuracy', () => {
+
+  // Helper: upload file, confirm columns, get to step 2
+  async function uploadAndMap(page) {
+    await page.goto('/');
+    await page.locator('#file-input').setInputFiles(FIXTURE_FULL_CSV);
+    await expect(page.locator('#file-preview')).toBeVisible();
+    await page.getByText('Continue to Mapping').click();
+    await expect(page.locator('#step-2')).toBeVisible();
+  }
+
+  // Helper: find the selected mapping for a given account name
+  async function getMappingForAccount(page, accountName) {
+    const rows = page.locator('#mapping-tbody tr');
+    const count = await rows.count();
+    for (let i = 0; i < count; i++) {
+      const row = rows.nth(i);
+      const name = await row.locator('td').first().textContent();
+      if (name && name.trim() === accountName) {
+        const select = row.locator('select');
+        return await select.inputValue();
+      }
+    }
+    return null;
+  }
+
+  const expectedMappings = [
+    ['Executive Director Salary', '5'],
+    ['Development Coordinator Salary', '7'],
+    ['Part-Time Program Staff', '7'],
+    ['Dental & Vision', '9'],
+    ['403(b) Employer Match', '8'],
+    ['FICA Taxes', '10'],
+    ['Grants to Partner Organizations', '1'],
+    ['Scholarships to Individuals', '2'],
+    ['Fundraising Consultant', '11e'],
+    ['Accounting & Audit Fees', '11c'],
+    ['Consulting - Strategic Planning', '11g'],
+    ['Staff Travel - Lodging', '17'],
+    ['Staff Travel - Airfare', '17'],
+    ['Utilities - Electric', '16'],
+    ['Internet Service', '14'],
+    ['Phone & Telecommunications', '14'],
+    ['IT Support Services', '14'],
+    ['Software Licenses', '14'],
+    ['Bank Service Charges', '24a'],
+    ['Credit Card Processing Fees', '24a'],
+    ['Participant Stipends', '24a'],
+    ['Annual Report Design & Print', '12'],
+    ['Professional Development Training', '19'],
+    ['Equipment Depreciation', '22'],
+    ['Interest on Line of Credit', '20'],
+    ['D&O Insurance', '23'],
+    ['Rent - Office Space', '16'],
+    ['Office Supplies', '13'],
+    ['Marketing & Outreach', '12'],
+  ];
+
+  for (const [accountName, expectedLine] of expectedMappings) {
+    test(`"${accountName}" should map to Line ${expectedLine}`, async ({ page }) => {
+      await uploadAndMap(page);
+      const mappedLine = await getMappingForAccount(page, accountName);
+      expect(mappedLine, `Expected "${accountName}" to map to Line ${expectedLine} but got Line ${mappedLine}`).toBe(expectedLine);
+    });
+  }
 });
