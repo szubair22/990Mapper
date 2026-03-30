@@ -58,12 +58,6 @@ test.describe('Page Load & Initial State', () => {
     await expect(disclaimer).toContainText('qualified tax professional');
   });
 
-  test('Fossys branding in footer', async ({ page }) => {
-    await page.goto('/');
-    const branding = page.locator('.branding');
-    await expect(branding).toBeVisible();
-    await expect(branding).toContainText('Fossys');
-  });
 });
 
 // ============================================================

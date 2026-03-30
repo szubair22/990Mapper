@@ -48,6 +48,3 @@ This tool is a mapping aid to help organize your chart of accounts for Form 990 
 
 MIT
 
-## Built By
-
-[Fossys](https://fossys.com)
